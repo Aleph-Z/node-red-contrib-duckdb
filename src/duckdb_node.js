@@ -182,6 +182,7 @@ module.exports = function(RED) {
             }
 
             node.on("input", function(msg) {
+                node.mydbConfig.doConnect()
                 if (msg.hasOwnProperty("extension")) {
                     node.mydbConfig.db.loadExtension(msg.extension, function(err) {
                         if (err) { node.error(err,msg); }
@@ -324,6 +325,7 @@ module.exports = function(RED) {
             try {
                 node.script = vm.createScript(functionText, createVMOpt(node, ""));
                 processMessage = async function (msg) {
+                    node.mydbConfig.doConnect()
                     context.msg = msg;
                     node.script.runInContext(context);
 
@@ -449,6 +451,7 @@ module.exports = function(RED) {
             }
 
             node.on("input", function(msg) {
+                node.mydbConfig.doConnect()
                 if (msg.hasOwnProperty("extension")) {
                     node.mydbConfig.db.loadExtension(msg.extension, function(err) {
                         if (err) { node.error(err,msg); }
@@ -515,6 +518,7 @@ module.exports = function(RED) {
             }
 
             node.on("input", function(msg) {
+                node.mydbConfig.doConnect()
                 if (msg.hasOwnProperty("extension")) {
                     node.mydbConfig.db.loadExtension(msg.extension, function(err) {
                         if (err) { node.error(err,msg); }
