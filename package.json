@@ -3,7 +3,7 @@
     "version": "0.1.4",
     "description": "Node-red node for duckdb",
     "dependencies": {
-        "duckdb": "^0.10.2"
+        "duckdb": "^1.0.0"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
