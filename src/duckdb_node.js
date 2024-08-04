@@ -337,16 +337,13 @@ module.exports = function(RED) {
                             await getExecResult(inputMsg.beforeProc, node.mydbConfig.con);
                         }
 
-                        if (typeof inputMsg.procQuery === 'string') {
+                        if (typeof inputMsg.procQuery === 'string' && inputMsg.proc) {
                             var offset = 0;
                             do {
                                 var batchSQLQuery = inputMsg.procQuery + " LIMIT " + batchSize.toString() + " OFFSET " + offset.toString() + ";";
                                 var rows = await getAllResult(batchSQLQuery, node.mydbConfig.con);
-                                var batchResQuery = "";
-                                rows.forEach(async row => {
-                                    batchResQuery = batchResQuery + inputMsg.proc(row) + '\n';
-                                });
-                                await getExecResult(batchResQuery, node.mydbConfig.con);
+                                const batchResQuery = (await Promise.all(rows.map(inputMsg.proc))).filter(x=>x).join('\n')
+                                if (batchResQuery) await getExecResult(batchResQuery, node.mydbConfig.con);
                                 offset = offset + batchSize;
                             } while (rows.length == batchSize)
                         }
